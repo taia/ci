@@ -48,6 +48,10 @@ if ( ! function_exists('is_php'))
 
 		if ( ! isset($_is_php[$version]))
 		{
+			//PHP_VERSION PHP定义的一个记录当前PHP版本的常量
+			//version_compare ( string $version1 , string $version2 [, string $operator ] ) — 对比两个「PHP 规范化」的版本数字字符串 
+			//默认情况下，在第一个版本低于第二个时， version_compare() 返回 -1；如果两者相等，返回 0；第二个版本更低时则返回 1。
+			//当使用了可选参数 operator 时，如果关系是操作符所指定的那个，函数将返回 TRUE，否则返回 FALSE。
 			$_is_php[$version] = (version_compare(PHP_VERSION, $version) < 0) ? FALSE : TRUE;
 		}
 
@@ -72,17 +76,28 @@ if ( ! function_exists('is_really_writable'))
 	function is_really_writable($file)
 	{
 		// If we're on a Unix server with safe_mode off we call is_writable
+		//DIRECTORY_SEPARATOR：路径分隔符，linux上就是‘/’    windows上是‘\’
+		//PATH_SEPARATOR：include多个路径使用，在windows下，当你要include多个路径的话，你要用”;”隔开，但在linux下就使用”:”隔开的
+		//ini_get 获取一个php.ini文件中配置选项的值
+		//safe_mode php的安全模式是个非常重要的内嵌的安全机制，能够控制一些php中的函数，比如system()，同时把很多文件操作函数进行了权限控制，也不允许对某些关键文件的文件
 		if (DIRECTORY_SEPARATOR == '/' AND @ini_get("safe_mode") == FALSE)
 		{
+			//is_writable — 判断给定的文件名是否可写
 			return is_writable($file);
 		}
 
 		// For windows servers and safe_mode "on" installations we'll actually
 		// write a file then read it.  Bah...
 		if (is_dir($file))
-		{
+		{	
+			//mt_rand(min,max) 使用 Mersenne Twister 算法返回随机整数。
 			$file = rtrim($file, '/').'/'.md5(mt_rand(1,100).mt_rand(1,100));
-
+			//fopen(filename,mode,include_path,context)
+			//filename	必需。规定要打开的文件或 URL。
+			//mode	必需。规定要求到该文件/流的访问类型。可能的值见下表。
+			//include_path	可选。如果也需要在 include_path 中检索文件的话，可以将该参数设为 1 或 TRUE。
+			//context	可选。规定文件句柄的环境。Context 是可以修改流的行为的一套选项。
+			//FOPEN_WRITE_CREATE 在这里代表的是ab "a"	写入方式打开，将文件指针指向文件末尾。如果文件不存在则尝试创建之。使用 "b" 来强制使用二进制模式
 			if (($fp = @fopen($file, FOPEN_WRITE_CREATE)) === FALSE)
 			{
 				return FALSE;
