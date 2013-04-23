@@ -166,6 +166,8 @@ if (defined('ENVIRONMENT'))
  * -------------------------------------------------------------------
  */
 	// The name of THIS file
+	//pathinfo(path,options) 函数以数组的形式返回文件路径的信息。  
+        //options : PATHINFO_DIRNAME - 只返回 dirname  PATHINFO_BASENAME - 只返回 basename  PATHINFO_EXTENSION - 只返回 extension
 	define('SELF', pathinfo(__FILE__, PATHINFO_BASENAME));
 
 	// The PHP file extension
@@ -173,12 +175,20 @@ if (defined('ENVIRONMENT'))
 	define('EXT', '.php');
 
 	// Path to the system folder
+//	str_replace(find,replace,string,count) 
+//find	必需。规定要查找的值。
+//replace	必需。规定替换 find 中的值的值。
+//string	必需。规定被搜索的字符串。
+//count	可选。一个变量，对替换数进行计数。
 	define('BASEPATH', str_replace("\\", "/", $system_path));
 
 	// Path to the front controller (this file)
 	define('FCPATH', str_replace(SELF, '', __FILE__));
 
 	// Name of the "system folder"
+//strrchr(string,char)   函数查找字符串在另一个字符串中最后一次出现的位置，并返回从该位置到字符串结尾的所有字符。如果成失败，否则返回 false。
+//string	必需。规定被搜索的字符串。
+//char	必需。规定要查找的字符。如果该参数是数字，则搜索匹配数字 ASCII 值的字符。
 	define('SYSDIR', trim(strrchr(trim(BASEPATH, '/'), '/'), '/'));
 
 
@@ -205,6 +215,7 @@ if (defined('ENVIRONMENT'))
  * And away we go...
  *
  */
+//包含文件 BASEPATH.'core/CodeIgniter.php';
 require_once BASEPATH.'core/CodeIgniter.php';
 
 /* End of file index.php */
